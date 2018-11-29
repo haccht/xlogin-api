@@ -1,0 +1,23 @@
+- flash.each do |key, val|
+  .alert.alert-dismissible.fade.show class="alert-#{key}"
+    = val
+    button.close data-dismiss="alert"
+      span &times;
+
+.float-right
+  .btn-toolbar
+    .btn-group.mr-2
+      = link_to edit_vendor_path(@vendor), class: 'btn btn-sm btn-dark'
+        i.fas.fa-edit
+        |  Edit
+    .btn-group.mr-2
+      = link_to vendor_path(@vendor), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'btn btn-sm btn-dark'
+        i.far.fa-trash-alt
+        |  Delete
+
+h4.mt-4
+  i.fas.fa-network-wired
+  =< @vendor.name.downcase
+
+pre.bg-dark.text-light.rounded.p-4.mt-4
+  code = @vendor.template
