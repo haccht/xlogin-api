@@ -12,21 +12,21 @@
 
 ActiveRecord::Schema.define(version: 2018_11_29_064826) do
 
-  create_table "actions", force: :cascade do |t|
-    t.string "uuid"
-    t.string "request"
-    t.string "response"
-    t.integer "vendor_id"
+  create_table "actions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.text "request"
+    t.text "response"
+    t.bigint "vendor_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["vendor_id"], name: "index_actions_on_vendor_id"
   end
 
-  create_table "vendors", force: :cascade do |t|
+  create_table "vendors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
-    t.string "template"
+    t.text "template"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "actions", "vendors"
 end
