@@ -10,6 +10,7 @@ class VendorsController < ApplicationController
   # GET /vendors/1
   # GET /vendors/1.json
   def show
+    @actions = @vendor.actions.order('created_at DESC').page(params[:page]).per(10)
   end
 
   # GET /vendors/new

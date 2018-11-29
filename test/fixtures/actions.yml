@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  uuid: MyString
+  request: MyString
+  response: MyString
+  ok: false
+
+two:
+  uuid: MyString
+  request: MyString
+  response: MyString
+  ok: false

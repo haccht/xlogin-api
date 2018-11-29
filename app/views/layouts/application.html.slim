@@ -14,15 +14,13 @@ html
           i.fas.fa-rocket
           |  Xlogin::API
 
-        button.navbar-toggler data-toggle='collapse' data-target='#navbarNav'
+        //button.navbar-toggler data-toggle='collapse' data-target='#navbarNav'
           span.navbar-toggler-icon
 
-        .collapse.navbar-collapse.ml-3 id="navbarNav"
+        //.collapse.navbar-collapse.ml-3 id="navbarNav"
           ul.navbar-nav.mr-auto
-            - Vendor.order(:name).each do |vendor|
-              li.nav-item
-                = link_to vendor_path(vendor), class: "nav-link #{:active if @vendor && @vendor.id == vendor.id}"
-                  = vendor.name.downcase
+            li.nav-item
+              | item
 
     .container
       = yield
