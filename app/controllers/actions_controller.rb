@@ -2,14 +2,18 @@ class ActionsController < ApplicationController
   protect_from_forgery with: :null_session
 
   def create
-    @vendor = Vendor.find(params[:vendor_id])
+    @vendor = Vendor.find_by(name: params[:vendor_name])
     request = action_params.to_h.deep_symbolize_keys
 
     begin
-      raise "Missing 'command' parameter in your request" unless request[:command]
+      raise "Invalid vendor name: #{params[:vendor_name]}" unless @vendor
+      raise "Missing parameter: 'command'" unless request[:command]
       response = service_call(request)
 
-      action = @vendor.actions.build(request: JSON.generate(request), response: JSON.generate(response))
+      action = @vendor.actions.build(
+        request:  JSON.generate(filter_password(request.deep_dup)),
+        response: JSON.generate(response)
+      )
       action.save!
 
       render json: { ok: true,  request: request, response: response }
@@ -55,6 +59,25 @@ class ActionsController < ApplicationController
 
     response[:finish_time] = Time.now
     response
+  end
+
+  def filter_password(request)
+    if request[:xlogin][:uri]
+      uri = Addressable::URI.parse(request[:xlogin][:uri])
+      uri.userinfo = uri.userinfo.gsub(/:(.+)$/, ':[FILTERED]')
+      request[:xlogin][:uri] = uri.to_s
+    end
+
+    if request[:xlogin][:userinfo]
+      userinfo = request[:xlogin][:userinfo]
+      request[:xlogin][:userinfo] = userinfo.gsub(/:(.+)$/, ':[FILTERED]')
+    end
+
+    if request[:xlogin][:password]
+      request[:xlogin][:password] = '[FILTERED]'
+    end
+
+    request
   end
 
 end

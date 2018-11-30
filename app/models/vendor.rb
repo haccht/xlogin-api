@@ -1,7 +1,17 @@
 class Vendor < ApplicationRecord
   has_many :actions
+  validates :name, presence: true, uniqueness: true
 
   XLOGIN_SESSION_POOL_SIZE = 3
+
+  before_save do
+    self.name = name.scan(/\w+/).join('_').downcase
+    self
+  end
+
+  def to_param
+    name
+  end
 
   def session(**opts)
     factory = Xlogin.factory
