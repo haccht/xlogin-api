@@ -32,14 +32,14 @@ class ActionsController < ApplicationController
 
     session_pool = @vendor.session_pool(**request[:xlogin])
     session_pool.with do |session|
-      body = session.cmd(request[:command])
+      body = request[:command].lines.map { |commandline| session.cmd(commandline) }.join
 
       response[:body] = body.lines
       response[:body].shift if request[:command_echo]   == false
       response[:body].pop   if request[:command_prompt] == false
 
       if request[:captures]
-        response[:captured] = request[:captures].each_with_bject({}) do |capture, hash|
+        response[:captured] = request[:captures].each_with_object({}) do |capture, hash|
           match = body.match(Regexp.new(capture[:regexp]))
           next hash unless match
 
