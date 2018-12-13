@@ -3,22 +3,22 @@ class ActionsController < ApplicationController
 
   def create
     @vendor = Vendor.find_by(name: params[:vendor_name])
-    request = action_params.to_h.deep_symbolize_keys
 
     begin
+      req = action_params.to_h.deep_symbolize_keys
       raise "Invalid vendor name: #{params[:vendor_name]}" unless @vendor
-      raise "Missing parameter: 'command'" unless request[:command]
-      response = service_call(request)
+      raise "Missing parameter: 'command'" unless req[:command]
 
+      resp   = service_call(req)
       action = @vendor.actions.build(
-        request:  JSON.generate(filter_password(request.deep_dup)),
-        response: JSON.generate(response)
+        request:  JSON.generate(filter_password(req.deep_dup)),
+        response: JSON.generate(resp)
       )
       action.save!
 
-      render json: { ok: true,  request: request, response: response }
+      render json: { ok: true,  request: req, response: resp }
     rescue => e
-      render json: { ok: false, request: request, error: e.message }
+      render json: { ok: false, request: req, error: e.message }
     end
   end
 
@@ -27,19 +27,19 @@ class ActionsController < ApplicationController
     params.permit({xlogin: {}, captures: [:regexp, :type]}, :command, :command_echo, :command_prompt)
   end
 
-  def service_call(request)
-    response = {start_time: Time.now}
+  def service_call(req)
+    resp = {start_time: Time.now}
 
-    session_pool = @vendor.session_pool(**request[:xlogin])
+    session_pool = @vendor.session_pool(**req[:xlogin])
     session_pool.with do |session|
-      body = request[:command].lines.map { |commandline| session.cmd(commandline) }.join
+      body = req[:command].lines.map { |commandline| session.cmd(commandline) }.join
 
-      response[:body] = body.lines
-      response[:body].shift if request[:command_echo]   == false
-      response[:body].pop   if request[:command_prompt] == false
+      resp[:body] = body.lines
+      resp[:body].shift if req[:command_echo]   == false
+      resp[:body].pop   if req[:command_prompt] == false
 
-      if request[:captures]
-        response[:captured] = request[:captures].each_with_object({}) do |capture, hash|
+      if req[:captures]
+        resp[:captured] = req[:captures].each_with_object({}) do |capture, hash|
           match = body.match(Regexp.new(capture[:regexp]))
           next hash unless match
 
@@ -57,27 +57,27 @@ class ActionsController < ApplicationController
       end
     end
 
-    response[:finish_time] = Time.now
-    response
+    resp[:finish_time] = Time.now
+    resp
   end
 
-  def filter_password(request)
-    if request[:xlogin][:uri]
-      uri = Addressable::URI.parse(request[:xlogin][:uri])
+  def filter_password(req)
+    if req[:xlogin][:uri]
+      uri = Addressable::URI.parse(req[:xlogin][:uri])
       uri.userinfo = uri.userinfo.gsub(/:(.+)$/, ':[FILTERED]')
-      request[:xlogin][:uri] = uri.to_s
+      req[:xlogin][:uri] = uri.to_s
     end
 
-    if request[:xlogin][:userinfo]
-      userinfo = request[:xlogin][:userinfo]
-      request[:xlogin][:userinfo] = userinfo.gsub(/:(.+)$/, ':[FILTERED]')
+    if req[:xlogin][:userinfo]
+      userinfo = req[:xlogin][:userinfo]
+      req[:xlogin][:userinfo] = userinfo.gsub(/:(.+)$/, ':[FILTERED]')
     end
 
-    if request[:xlogin][:password]
-      request[:xlogin][:password] = '[FILTERED]'
+    if req[:xlogin][:password]
+      req[:xlogin][:password] = '[FILTERED]'
     end
 
-    request
+    req
   end
 
 end
