@@ -10,16 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_29_064826) do
-
-  create_table "actions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.text "request"
-    t.text "response"
-    t.bigint "vendor_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["vendor_id"], name: "index_actions_on_vendor_id"
-  end
+ActiveRecord::Schema.define(version: 2018_11_27_081929) do
 
   create_table "vendors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -28,5 +19,4 @@ ActiveRecord::Schema.define(version: 2018_11_29_064826) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "actions", "vendors"
 end

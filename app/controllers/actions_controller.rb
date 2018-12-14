@@ -9,16 +9,14 @@ class ActionsController < ApplicationController
       raise "Invalid vendor name: #{params[:vendor_name]}" unless @vendor
       raise "Missing parameter: 'command'" unless req[:command]
 
-      resp   = service_call(req)
-      action = @vendor.actions.build(
-        request:  JSON.generate(filter_password(req.deep_dup)),
-        response: JSON.generate(resp)
-      )
-      action.save!
-
-      render json: { ok: true,  request: req, response: resp }
+      resp = service_call(req)
+      hash = { ok: true,  request: req, response: resp }
+      logger.debug("API Response: #{hash}")
+      render json: hash
     rescue => e
-      render json: { ok: false, request: req, error: e.message }
+      hash = { ok: false, request: req, error: e.message }
+      logger.debug("API Response: #{hash}")
+      render json: hash
     end
   end
 
