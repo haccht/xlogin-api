@@ -2,8 +2,6 @@ class Vendor < ApplicationRecord
   has_many :actions
   validates :name, presence: true, uniqueness: true
 
-  XLOGIN_SESSION_POOL_SIZE = 3
-
   before_save do
     self.name = name.scan(/\w+/).join('_').downcase
     self
@@ -22,6 +20,10 @@ class Vendor < ApplicationRecord
   def session_pool(**opts)
     factory = Xlogin.factory
     factory.set_template(name, template)
-    factory.build_pool(type: name, pool_size: XLOGIN_SESSION_POOL_SIZE, **opts)
+
+    pool = factory.build_pool(type: name, **opts)
+    pool.size = pool_size
+    pool.idle = pool_idle
+    pool
   end
 end

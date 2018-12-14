@@ -10,13 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_27_081929) do
+ActiveRecord::Schema.define(version: 2018_12_14_002821) do
 
   create_table "vendors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.text "template"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "pool_size", default: 1
+    t.integer "pool_idle", default: 10
   end
 
 end

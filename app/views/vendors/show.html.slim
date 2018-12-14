@@ -5,7 +5,7 @@
       span &times;
 
 
-.float-right
+.d-flex.justify-content-end.mt-4
   .btn-toolbar
     .btn-group.mr-2
       = link_to edit_vendor_path(@vendor), class: 'btn btn-sm btn-dark'
@@ -16,12 +16,22 @@
         i.far.fa-trash-alt
         |  Delete
 
-h4.my-4
+h4
   i.fas.fa-network-wired
   =< @vendor.name
 
 pre.bg-dark.text-light.rounded.p-4.my-4
   .code = @vendor.template
+
+h4.my-4
+  i.fas.fa-swimming-pool
+  |  session pool
+
+pre.bg-dark.text-light.rounded.p-4.my-4
+  .code
+    |
+      size = #{@vendor.pool_size}
+      idle_timeout = #{@vendor.pool_idle}
 
 
 h4.my-4
@@ -33,23 +43,3 @@ pre.bg-dark.text-light.rounded.p-4.my-4
     |
       $ curl -H 'Content-type: application/json' -X POST #{vendor_actions_url(@vendor)} \
              -d '{"xlogin": {"scheme": "telnet", "userinfo": "admin:admin", "host": "192.168.1.1"}, "command": "ping 192.168.1.2"}'
-
-
-//- unless @actions.empty?
-  h4.mt-5
-    i.fas.fa-history
-    |  history
-
-  .list-group.my-4
-    - @actions.each do |action|
-      .list-group-item
-        dl.row.mb-0
-          dt.col-lg-1.text-monospace Request:
-          dd.col-lg-11
-            code = action.request
-          dt.col-lg-1.text-monospace Response:
-          dd.col-lg-11
-            code = action.response
-        small.float-right.text-muted
-          | #{time_ago_in_words(action.created_at)} ago
-  = paginate @actions
