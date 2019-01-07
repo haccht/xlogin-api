@@ -8,7 +8,7 @@ class Vendor < ApplicationRecord
   end
 
   def to_param
-    name
+    name.to_s.downcase
   end
 
   def session(**opts)
@@ -19,7 +19,7 @@ class Vendor < ApplicationRecord
 
   def session_pool(**opts)
     factory = Xlogin.factory
-    factory.set_template(name, template)
+    factory.set_template(name, template) unless factory.list_templates.include?(name)
 
     pool = factory.build_pool(type: name, **opts)
     pool.size = pool_size
