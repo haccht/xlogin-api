@@ -14,7 +14,7 @@ class ActionsController < ApplicationController
       logger.debug("API Response: #{hash}")
       render json: hash
     rescue => e
-      hash = { ok: false, request: req, error: e.message }
+      hash = { ok: false, request: req, error: { message: e.to_s, trace: e.backtrace.to_s } }
       logger.debug("API Response: #{hash}")
       render json: hash
     end
