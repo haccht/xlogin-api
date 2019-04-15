@@ -8,15 +8,15 @@ class ActionsController < ApplicationController
       req = action_params.to_h.deep_symbolize_keys
       raise "Invalid vendor name: #{params[:vendor_name]}" unless @vendor
       raise "Missing parameter: 'command'" unless req[:command]
-      logger.debug("API Request: #{req}")
+      logger.info("API Request: #{req}")
 
       resp = service_call(req)
       hash = { ok: true,  request: req, response: resp }
-      #logger.debug("API Response: #{hash}")
+      #logger.info("API Response: #{hash}")
       render json: hash
     rescue => e
       hash = { ok: false, request: req, error: { message: e.to_s, trace: e.backtrace.to_s } }
-      #logger.debug("API Response: #{hash}")
+      #logger.info("API Response: #{hash}")
       render json: hash
     end
   end
