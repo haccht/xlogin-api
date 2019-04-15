@@ -8,14 +8,15 @@ class ActionsController < ApplicationController
       req = action_params.to_h.deep_symbolize_keys
       raise "Invalid vendor name: #{params[:vendor_name]}" unless @vendor
       raise "Missing parameter: 'command'" unless req[:command]
+      logger.debug("API Request: #{req}")
 
       resp = service_call(req)
       hash = { ok: true,  request: req, response: resp }
-      logger.debug("API Response: #{hash}")
+      #logger.debug("API Response: #{hash}")
       render json: hash
     rescue => e
       hash = { ok: false, request: req, error: { message: e.to_s, trace: e.backtrace.to_s } }
-      logger.debug("API Response: #{hash}")
+      #logger.debug("API Response: #{hash}")
       render json: hash
     end
   end
@@ -28,7 +29,7 @@ class ActionsController < ApplicationController
   def service_call(req)
     resp = {start_time: Time.now}
 
-    session_pool = @vendor.session_pool(**req[:xlogin])
+    session_pool = Vendor.build_pool(@vendor, **req[:xlogin])
     session_pool.with do |session|
       body = req[:command].lines.map { |commandline| session.cmd(commandline) }.join
 
