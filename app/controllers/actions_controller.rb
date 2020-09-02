@@ -19,7 +19,7 @@ class ActionsController < ApplicationController
 
   private
   def action_params
-    params.permit({xlogin: {}, :command, captures: [:regexp, :type]})
+    params.permit(:command, xlogin: {}, captures: [:regexp, :type])
   end
 
   def action_execute(vendor, request)
