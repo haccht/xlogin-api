@@ -7,7 +7,7 @@ class ActionsController < ApplicationController
 
     begin
       request  = action_params.to_h.deep_symbolize_keys
-      response = action_execute(@vendor, request)
+      response = action_execute(request)
 
       hash = { ok: true,  request: request, response: response }
       render json: hash
@@ -22,10 +22,26 @@ class ActionsController < ApplicationController
     params.permit(:command, xlogin: {}, captures: [:regexp, :type])
   end
 
-  def action_execute(vendor, request)
+  def action_execute(request)
     resp = {start_time: Time.now}
 
-    session_pool = vendor.build_pool(**request[:xlogin])
+    factory = Xlogin.factory
+    hostkey = opts[:host] || opts[:uri]
+
+    hostinfo = factory.get_hostinfo(hostkey)
+    unless hostinfo
+      hostinfo = {
+        pool: factory.build_pool(
+          type:      hostkey,
+          pool_size: pool_size,
+          pool_idle: pool_idle,
+          **opts
+        )
+      }
+      factory.set_hostinfo(hostkey, **hostinfo)
+    end
+
+    session_pool = hostinfo[:pool]
     session_pool.with do |session|
       resp[:body] = request[:command].lines.flat_map { |e| session.cmd(e).lines }
 
