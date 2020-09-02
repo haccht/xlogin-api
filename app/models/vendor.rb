@@ -7,19 +7,29 @@ class Vendor < ApplicationRecord
     self
   end
 
-  def self.build_pool(vendor, **opts)
-    @pools ||= {}
-    return @pools[opts] if @pools[opts]
-
+  after_initialize do
     factory = Xlogin.factory
-    factory.set_template(vendor.name, vendor.template) unless factory.get_template(vendor.name)
+    factory.set_template(name, template) unless factory.get_template(name)
+  end
 
-    @pools[opts] = factory.build_pool(
-      type:      vendor.name,
-      pool_size: vendor.pool_size,
-      pool_idle: vendor.pool_idle,
-      **opts
-    )
+  def build_pool(**opts)
+    factory = Xlogin.factory
+    hostkey = opts[:host] || opts[:uri]
+
+    hostinfo = factory.get_hostinfo(hostkey)
+    unless hostinfo
+      hostinfo = {
+        pool: factory.build_pool(
+          type:      hostkey,
+          pool_size: pool_size,
+          pool_idle: pool_idle,
+          **opts
+        )
+      }
+      factory.set_hostinfo(hostkey, **hostinfo)
+    end
+
+    hostinfo[:pool]
   end
 
   def to_param
