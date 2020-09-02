@@ -3,11 +3,13 @@ class ActionsController < ApplicationController
 
   def create
     @vendor = Vendor.find_by(name: params[:vendor_name])
-    raise "Invalid vendor name: #{params[:vendor_name]}" unless @vendor
+    request = action_params.to_h.deep_symbolize_keys
 
     begin
-      request  = action_params.to_h.deep_symbolize_keys
-      response = action_execute(request)
+      raise "Invalid vendor name: #{params[:vendor_name]}" unless @vendor
+
+      pool = @vendor.session_pool(**request[:xlogin])
+      response = action_execute(pool, request)
 
       hash = { ok: true,  request: request, response: response }
       render json: hash
@@ -22,27 +24,10 @@ class ActionsController < ApplicationController
     params.permit(:command, xlogin: {}, captures: [:regexp, :type])
   end
 
-  def action_execute(request)
+  def action_execute(pool, request)
     resp = {start_time: Time.now}
 
-    factory = Xlogin.factory
-    hostkey = opts[:host] || opts[:uri]
-
-    hostinfo = factory.get_hostinfo(hostkey)
-    unless hostinfo
-      hostinfo = {
-        pool: factory.build_pool(
-          type:      hostkey,
-          pool_size: pool_size,
-          pool_idle: pool_idle,
-          **opts
-        )
-      }
-      factory.set_hostinfo(hostkey, **hostinfo)
-    end
-
-    session_pool = hostinfo[:pool]
-    session_pool.with do |session|
+    pool.with do |session|
       resp[:body] = request[:command].lines.flat_map { |e| session.cmd(e).lines }
 
       if request[:captures]
