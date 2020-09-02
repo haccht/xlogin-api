@@ -14,11 +14,12 @@ class Vendor < ApplicationRecord
     factory = Xlogin.factory
     factory.set_template(vendor.name, vendor.template) unless factory.get_template(vendor.name)
 
-    pool = factory.build_pool(type: vendor.name, **opts)
-    pool.size = vendor.pool_size
-    pool.idle = vendor.pool_idle
-
-    @pools[opts] = pool
+    @pools[opts] = factory.build_pool(
+      type:      vendor.name,
+      pool_size: vendor.pool_size,
+      pool_idle: vendor.pool_idle,
+      **opts
+    )
   end
 
   def to_param
