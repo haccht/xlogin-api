@@ -1,0 +1,31 @@
+- pool.errors.full_messages.each do |message|
+  .alert.alert-danger.alert-dismissible.fade.show.mb-2
+    = message
+    button.close data-dismiss="alert"
+      span &times;
+
+= form_with(model: pool, local: true) do |form|
+
+  .form-group
+    = form.label :name
+    = form.text_field :name, class:"form-control text-monospace"
+
+  .form-group
+    = form.label :template
+    = form.text_area :template, rows:12, class:"form-control text-monospace"
+
+  .form-row
+    .form-group.col-6
+      = form.label :size
+        | Session pool size
+      = form.number_field :size, class:"form-control text-monospace"
+
+    .form-group.col-6
+      = form.label :idle
+        | Session pool idle timeout
+      .input-group
+        = form.number_field :idle, class:"form-control text-monospace"
+        .input-group-append
+          .input-group-text sec
+
+  = form.submit 'Register', class:"btn btn-primary btn-block btn-lg my-3"

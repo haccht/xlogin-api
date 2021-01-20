@@ -1,0 +1,35 @@
+div.d-flex.justify-content-end
+  button.btn.btn-outline-dark.btn-sm#copyClip
+    i.fas.fa-copy.mr-2
+    | Copy
+pre.bg-dark.text-light.rounded.my-4.p-2#responseText style='max-height: 800px; min-height: 200px;'
+
+javascript:
+  let sse = new EventSource(location.href);
+  sse.onerror = function(e) {
+      let text = $('#responseText').text();
+      sse.close();
+      console.log(e);
+      $('#responseText').text(text + "\n\n");
+  };
+  sse.onmessage = function(e) {
+      let text = $('#responseText').text();
+      let data = JSON.parse(e.data);
+      $('#responseText').text(text + data.chunk);
+  };
+
+  $('#copyClip').on('click', function() {
+      let text  = $('#responseText');
+      let range = document.createRange();
+
+      range.selectNodeContents(text[0]);
+
+      let selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      document.execCommand('copy');
+      selection.removeAllRanges();
+
+      alert('Copied!');
+  });

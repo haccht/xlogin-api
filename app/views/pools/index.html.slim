@@ -1,0 +1,29 @@
+p#notice
+  = notice
+
+.row
+  - @pools.each do |pool|
+    .col-3
+      a.text-decoration-none href=pool_path(pool)
+        .card.shadow-sm
+          .card-body
+            h5.card-title.text-monospace.text-lowercase.text-dark
+              i.fas.fa-toolbox.mr-2
+              = pool.name
+            pre.card-text.bg-dark.text-light.rounded.p-2 style="height:10em; overflow:hidden;"
+              = pool.template
+
+  .col-3
+    a.text-decoration-none href=new_pool_path
+      .card.shadow-sm
+        .card-body
+          h5.card-title.text-monospace.text-muted
+            i.fas.fa-plus.mr-2
+            | add new
+          pre.card-text.bg-secondary.text-light.rounded.p-2 style="height:10em; overflow:hidden;"
+            | prompt(/> \z/)
+              login do |*args|
+                username, password = *args
+                waitfor(/Username: /) && puts(username)
+                waitfor(/Password: /) && puts(password)
+                waitfor

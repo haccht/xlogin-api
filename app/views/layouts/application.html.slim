@@ -2,25 +2,29 @@ doctype html
 html
   head
     title Xlogin::API
+    meta[name="viewport" content="width=device-width,initial-scale=1"]
     = csrf_meta_tags
     = csp_meta_tag
-    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
-    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
 
-  body.main.bg-light
-    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.fixed-top
+  body data-action="#{controller_name}##{action_name}"
+
+    nav.navbar.navbar-expand-md.navbar-dark.bg-dark
       .container
-        = link_to root_path, class: 'navbar-brand'
-          i.fas.fa-fire
-          |  Xlogin::API
-
-        //button.navbar-toggler data-toggle='collapse' data-target='#navbarNav'
+        a.navbar-brand.text-monospace href=root_path(from: @from, to: @to)
+          i.fas.fa-fire-alt.mr-2
+          | Xlogin::API
+        button.navbar-toggler type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
           span.navbar-toggler-icon
 
-        //.collapse.navbar-collapse.ml-3 id="navbarNav"
+        #navbarSupportedContent.collapse.navbar-collapse
           ul.navbar-nav.ml-auto
             li.nav-item
-              i.fab.fa-gitlab
+              a.nav-link href="http://casper.ssc-otemachi.ocn.ad.jp/hozen/gitlab/haccht/xlogin-api" target="_blank"
+                i.fab.fa-gitlab
 
-    .container
-      = yield
+          .dropdown.mr-2.my-sm-2.my-lg-0
+
+    .container style="padding-top: 20px;"
+      == yield

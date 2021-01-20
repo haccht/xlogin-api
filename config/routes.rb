@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
-  get 'actions/create'
-  root to: 'vendors#index'
-  resources :vendors, param: :name do
-    resource :actions, only: :create, constraints: { format: 'json' }
-  end
+  root to: 'pools#index'
+  get 'cmd',    to: 'commands#show'
+  get 'stream', to: 'commands#stream'
+  resources :pools
 end
