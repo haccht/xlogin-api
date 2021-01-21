@@ -8,13 +8,15 @@ class Pool < ApplicationRecord
     factory = Xlogin.factory
     factory.list_hostinfo("type:#{self.name}").each do |hostinfo|
       hostkey = hostinfo[:name]
+      hostinfo = factory.get_hostinfo(hostkey)
+      hostinfo[:pool].close
       factory.set_hostinfo(hostkey, pool: nil)
     end
   end
 
   def generate(**opts)
     factory = Xlogin.factory
-    hostkey = opts.map{ |k, v| "#{k}=#{v}" }.join('&')
+    hostkey = opts.map { |k, v| "#{k}=#{v}" }.join('&')
 
     hostinfo = factory.get_hostinfo(hostkey)
     unless hostinfo && hostinfo[:pool]

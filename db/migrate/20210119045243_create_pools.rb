@@ -4,7 +4,7 @@ class CreatePools < ActiveRecord::Migration[6.1]
       t.string :name, null: false
       t.text :template
       t.integer :size, default: 1
-      t.integer :idle, default: 10
+      t.integer :idle, default: 60
 
       t.timestamps
     end

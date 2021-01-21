@@ -23,14 +23,10 @@ class CommandsController < ApplicationController
         begin
           response.set_header('Content-Type', 'text/event-stream')
           response.set_header('Last-Modified', Time.now.httpdate)
-          execute do |chunk|
-            chunk.each_line do |line|
-              response.stream.write("data: #{JSON.generate({chunk: line})}\n\n")
-            end
-          end
+          execute { |c| response.stream.write("data: #{JSON.generate({chunk: c})}\n\n") }
         rescue => e
           logger.error(e.message)
-          response.stream.write(e.message)
+          response.stream.write("data: #{JSON.generate({chunk: e.message})}\n\n")
         ensure
           response.stream.close
         end

@@ -29,10 +29,15 @@ button.btn.btn-primary type='button' data-toggle='modal' data-target='#commandMo
           label for='target' TARGET
           input.form-control#target type='text' placeholder='ascai201karaga-mpls.mpls-shirahige.ocn.ad.jp'
         .form-row
-          .form-group.col-6
+          .form-group.col-4
+            label for='scheme' CONNECT
+            select.form-control#scheme
+              option value='telnet' selected='selected' telnet
+              option value='ssh' ssh
+          .form-group.col-4
             label for='username' USERNAME
             input.form-control#username type='text' placeholder='username'
-          .form-group.col-6
+          .form-group.col-4
             label for='password' PASSWORD
             input.form-control#password type='text' placeholder='password'
         .form-group
@@ -50,7 +55,7 @@ javascript:
           pool:    $('#poolName').val(),
           command: $('#commandLine').val(),
           target:  {
-            scheme:   'telnet',
+            scheme:   $('#scheme').val(),
             userinfo: $('#username').val() + ':' + $('#password').val(),
             host:     $('#target').val(),
           },

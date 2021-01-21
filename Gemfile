@@ -60,3 +60,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "xlogin", "~> 0.15.4"
 
 gem "slim-rails", "~> 3.2"
+
+gem "mysql2", "~> 0.5.3"
+gem "procsd", "~> 0.5.4"
