@@ -9,7 +9,9 @@ class CommandsController < ApplicationController
     logger.info command_params
 
     respond_to do |format|
-      format.html
+      format.html do
+        @query = command_params
+      end
       format.json do
         begin
           resp = StringIO.new

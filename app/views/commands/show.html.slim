@@ -2,10 +2,11 @@ div.d-flex.justify-content-end
   button.btn.btn-outline-dark.btn-sm#copyClip
     i.fas.fa-copy.mr-2
     | Copy
-pre.bg-dark.text-light.rounded.my-4.p-2#responseText style='max-height: 800px; min-height: 200px;'
+pre.bg-dark.text-light.rounded.my-4.p-2#responseText data-query=URI.encode_www_form_component(@query) style='max-height: 800px; min-height: 200px;'
 
 javascript:
-  let sse = new EventSource(location.href);
+  let locationUrl = location.origin + location.pathname + '?q=' + $('#responseText').data('query');
+  let sse = new EventSource(locationUrl);
   sse.onerror = function(e) {
       let text = $('#responseText').text();
       sse.close();

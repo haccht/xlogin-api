@@ -23,7 +23,8 @@ button.btn.btn-primary type='button' data-toggle='modal' data-target='#commandMo
 .modal#commandModal tabindex=-1
   .modal-dialog.modal-lg.modal-dialog-centered
     .modal-content
-      form.form.modal-body#commandForm action=cmd_path
+      form.form.modal-body#commandForm action=cmd_path method='POST'
+        input#queryParam type='hidden' name='q'
         input#driverName type='hidden' value=@driver.name
         .form-group
           label for='target' TARGET
@@ -39,7 +40,7 @@ button.btn.btn-primary type='button' data-toggle='modal' data-target='#commandMo
             input.form-control#username type='text' placeholder='username'
           .form-group.col-4
             label for='password' PASSWORD
-            input.form-control#password type='text' placeholder='password'
+            input.form-control#password type='password' placeholder='password'
         .form-group
           label for='commandLine' COMMAND
           input.form-control#commandLine type='text' placeholder='show users'
@@ -48,9 +49,6 @@ button.btn.btn-primary type='button' data-toggle='modal' data-target='#commandMo
 
 javascript:
   $('#commandForm').on('submit', function(e) {
-      e.preventDefault();
-
-      let action  = $('#commandForm').attr('action');
       let request = {
           driver:  $('#driverName').val(),
           command: $('#commandLine').val(),
@@ -61,6 +59,5 @@ javascript:
           },
       };
 
-      let requestJson = JSON.stringify(request);
-      location.href = action + "?q=" + encodeURIComponent(requestJson);
+      $('#queryParam').val(JSON.stringify(request));
   });
