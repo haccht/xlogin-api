@@ -3,4 +3,4 @@ processes:
     web: bundle exec pumactl start
 environment:
     RAILS_ENV: development
-    RAILS_RELATIVE_URL_ROOT: /neapi/v1
+    RAILS_RELATIVE_URL_ROOT: /hozen/netapi/v1

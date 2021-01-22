@@ -44,4 +44,4 @@ plugin :tmp_restart
 
 state_path "tmp/puma.state"
 pidfile    "tmp/pids/puma.pid"
-bind       "unix://#{Dir.pwd}/tmp/sockets/puma.sock"
+bind       "unix://#{Dir.pwd}/tmp/puma.sock"
