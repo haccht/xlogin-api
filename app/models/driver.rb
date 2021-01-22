@@ -1,4 +1,4 @@
-class Pool < ApplicationRecord
+class Driver < ApplicationRecord
   after_initialize do
     factory = Xlogin.factory
     factory.set_template(self.name, self.template) unless factory.get_template(self.name)
@@ -9,8 +9,8 @@ class Pool < ApplicationRecord
     factory.list_hostinfo("type:#{self.name}").each do |hostinfo|
       hostkey = hostinfo[:name]
       hostinfo = factory.get_hostinfo(hostkey)
-      hostinfo[:pool].close
-      factory.set_hostinfo(hostkey, pool: nil)
+      hostinfo[:driver].close
+      factory.set_hostinfo(hostkey, driver: nil)
     end
   end
 
@@ -19,15 +19,15 @@ class Pool < ApplicationRecord
     hostkey = opts.map { |k, v| "#{k}=#{v}" }.join('&')
 
     hostinfo = factory.get_hostinfo(hostkey)
-    unless hostinfo && hostinfo[:pool]
-      pool = factory.build_pool(type: self.name, **opts)
-      pool.size = self.size
-      pool.idle = self.idle
+    unless hostinfo && hostinfo[:driver]
+      driver = factory.build_driver(type: self.name, **opts)
+      driver.size = self.size
+      driver.idle = self.idle
 
-      hostinfo = {type: self.name, pool: pool}
+      hostinfo = {type: self.name, driver: driver}
       factory.set_hostinfo(hostkey, **hostinfo)
     end
 
-    hostinfo[:pool]
+    hostinfo[:driver]
   end
 end

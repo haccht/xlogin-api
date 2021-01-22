@@ -1,6 +1,6 @@
 require "test_helper"
 
-class PoolTest < ActiveSupport::TestCase
+class DriverTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

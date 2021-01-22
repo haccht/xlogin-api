@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  root to: 'pools#index'
+  root to: 'drivers#index'
   get 'cmd',    to: 'commands#show'
   get 'stream', to: 'commands#stream'
-  resources :pools
+  resources :drivers
 end

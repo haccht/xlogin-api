@@ -61,8 +61,8 @@ class CommandsController < ApplicationController
     timeout = params[:target].delete(:timeout) || DEFAULT_TIMEOUT
     command = params[:command]
 
-    factory = Pool.find_by(name: params[:pool])
-    raise "No such pool - #{params[:pool]}" unless factory
+    factory = Driver.find_by(name: params[:driver])
+    raise "No such driver - #{params[:driver]}" unless factory
 
     factory.generate(**params[:target]).with do |s|
       begin

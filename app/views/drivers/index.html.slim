@@ -2,19 +2,19 @@ p#notice
   = notice
 
 .row
-  - @pools.each do |pool|
+  - @drivers.each do |driver|
     .col-3
-      a.text-decoration-none href=pool_path(pool)
+      a.text-decoration-none href=driver_path(driver)
         .card.shadow-sm
           .card-body
             h5.card-title.text-monospace.text-lowercase.text-dark
               i.fas.fa-toolbox.mr-2
-              = pool.name
+              = driver.name
             pre.card-text.bg-dark.text-light.rounded.p-2 style="height:10em; overflow:hidden;"
-              = pool.template
+              = driver.template
 
   .col-3
-    a.text-decoration-none href=new_pool_path
+    a.text-decoration-none href=new_driver_path
       .card.shadow-sm
         .card-body
           h5.card-title.text-monospace.text-muted

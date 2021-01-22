@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2021_01_19_045243) do
 
-  create_table "pools", force: :cascade do |t|
+  create_table "drivers", force: :cascade do |t|
     t.string "name", null: false
     t.text "template"
     t.integer "size", default: 1

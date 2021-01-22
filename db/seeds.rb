@@ -5,7 +5,7 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-iosxr = Pool.new(name: 'iosxr')
+iosxr = Driver.new(name: 'iosxr')
 iosxr.template = <<~EOL
 prompt(/#/)
 login do |*args|

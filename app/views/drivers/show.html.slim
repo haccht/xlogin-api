@@ -5,17 +5,17 @@ h4
   .d-flex.justify-content-between
     .text-monospace.text-lowercase
       i.fas.fa-toolbox.mr-2
-      = @pool.name
+      = @driver.name
     .btn-toolbar
-      a.btn.btn-outline-dark.btn-sm.mr-2 href=edit_pool_path(@pool)
+      a.btn.btn-outline-dark.btn-sm.mr-2 href=edit_driver_path(@driver)
         i.fas.fa-edit.mr-2
         | Edit
-      a.btn.btn-danger.btn-sm.mr-2  href=pool_path(@pool) method='delete' data-confirm="Are you sure you want to delete '#{@pool.name}'?"
+      a.btn.btn-danger.btn-sm.mr-2  href=driver_path(@driver) method='delete' data-confirm="Are you sure you want to delete '#{@driver.name}'?"
         i.fas.fa-trash-alt.mr-2
         | Delete
 
 pre.bg-placeholder-img.card-img-top.bg-dark.text-light.rounded.my-4.p-2
-  = @pool.template
+  = @driver.template
 
 button.btn.btn-primary type='button' data-toggle='modal' data-target='#commandModal'
   | Command Runner
@@ -24,7 +24,7 @@ button.btn.btn-primary type='button' data-toggle='modal' data-target='#commandMo
   .modal-dialog.modal-lg.modal-dialog-centered
     .modal-content
       form.form.modal-body#commandForm action=cmd_path
-        input#poolName type='hidden' value=@pool.name
+        input#driverName type='hidden' value=@driver.name
         .form-group
           label for='target' TARGET
           input.form-control#target type='text' placeholder='ascai201karaga-mpls.mpls-shirahige.ocn.ad.jp'
@@ -52,7 +52,7 @@ javascript:
 
       let action  = $('#commandForm').attr('action');
       let request = {
-          pool:    $('#poolName').val(),
+          driver:  $('#driverName').val(),
           command: $('#commandLine').val(),
           target:  {
             scheme:   $('#scheme').val(),
