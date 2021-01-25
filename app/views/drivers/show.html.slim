@@ -28,7 +28,7 @@ button.btn.btn-primary type='button' data-toggle='modal' data-target='#commandMo
         input#driverName type='hidden' value=@driver.name
         .form-group
           label for='target' TARGET
-          input.form-control#target type='text' placeholder='ascai201karaga-mpls.mpls-shirahige.ocn.ad.jp'
+          input.form-control#target type='text' placeholder='Eg: router1.example.com'
         .form-row
           .form-group.col-4
             label for='scheme' CONNECT
@@ -43,7 +43,7 @@ button.btn.btn-primary type='button' data-toggle='modal' data-target='#commandMo
             input.form-control#password type='password' placeholder='password'
         .form-group
           label for='commandLine' COMMAND
-          input.form-control#commandLine type='text' placeholder='show users'
+          input.form-control#commandLine type='text' placeholder='show running-config'
         button.btn.btn-primary.btn-lg.btn-block.mt-4#executeButton
           | Go
 
