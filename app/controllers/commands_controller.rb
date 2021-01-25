@@ -68,7 +68,7 @@ class CommandsController < ApplicationController
 
     factory.generate(**params[:target]).with do |s|
       begin
-        ['', *command.lines].each do |line|
+        ['', *[*command].flat_map(&:lines)].each do |line|
           s.cmd('String' => line, 'Timeout' => timeout) do |chunk|
             block.call(chunk)
           end
