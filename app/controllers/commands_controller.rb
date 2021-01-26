@@ -78,6 +78,7 @@ class CommandsController < ApplicationController
             command_args = {'String' => command_args, 'Timeout' => timeout}
           when Hash
             command_args = {'Timeout' => timeout}.merge(command_args.transform_keys(&:to_s))
+            command_args['Match'] = Regexp.new(command_args['Match']) if command_args['Match']
           else
             raise "Invalid argument - #{JSON.generate(command_args)}"
           end
