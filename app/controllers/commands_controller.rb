@@ -62,20 +62,32 @@ class CommandsController < ApplicationController
 
     timeout = params[:target].delete(:timeout) || DEFAULT_TIMEOUT
     command = params[:command]
+    outputs = StringIO.new
 
     factory = Driver.find_by(name: params[:driver])
     raise "No such driver - #{params[:driver]}" unless factory
 
     factory.generate(**params[:target]).with do |s|
       begin
-        ['', *[*command].flat_map(&:lines)].each do |line|
-          s.cmd('String' => line, 'Timeout' => timeout) do |chunk|
-            block.call(chunk)
+        s.cmd('') { |chunk| block.call(chunk) }
+
+        command = [command] unless command.kind_of?(Array)
+        command.each do |command_args|
+          case command_args
+          when String
+            command_args = {'String' => command_args, 'Timeout' => timeout}
+          when Hash
+            command_args = {'Timeout' => timeout}.merge(command_args.transform_keys(&:to_s))
+          else
+            raise "Invalid argument - #{JSON.generate(command_args)}"
           end
+          outputs.print s.cmd(command_args) { |chunk| block.call(chunk) }
         end
       rescue => e
         s.close if s
         raise e
+      ensure
+        outputs.string
       end
     end
   end
