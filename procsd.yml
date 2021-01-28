@@ -3,4 +3,5 @@ processes:
     web: bundle exec pumactl start
 environment:
     RAILS_ENV: development
+    RAILS_MAX_THREADS: 10
     RAILS_RELATIVE_URL_ROOT: /hozen/netapi/v1
