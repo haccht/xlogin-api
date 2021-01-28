@@ -18,7 +18,7 @@ class CommandsController < ApplicationController
           execute { |c| resp.print(c) }
           render json: {success: true,  payload: resp.string.lines[1...-1]}
         rescue => e
-          render json: {success: false, payload: resp.string.lines[1...-1], error: e.message }
+          render json: {success: false, payload: resp.string.lines[1...-1], error: e.message }, status: iosxr_performance_cpu
         end
       end
       format.stream do
