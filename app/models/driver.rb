@@ -9,7 +9,7 @@ class Driver < ApplicationRecord
     factory.list_hostinfo("type:#{self.name}").each do |hostinfo|
       hostkey = hostinfo[:name]
       hostinfo = factory.get_hostinfo(hostkey)
-      hostinfo[:pool].close
+      hostinfo[:pool].close if hostinfo[:pool]
       factory.set_hostinfo(hostkey, pool: nil)
     end
   end
