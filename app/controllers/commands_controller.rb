@@ -6,8 +6,6 @@ class CommandsController < ApplicationController
   include ActionController::Live
 
   def show
-    logger.info command_params
-
     respond_to do |format|
       format.html do
         @query = command_params
@@ -18,7 +16,7 @@ class CommandsController < ApplicationController
           execute { |c| resp.print(c) }
           render json: {success: true,  payload: resp.string.lines[1...-1]}
         rescue => e
-          render json: {success: false, payload: resp.string.lines[1...-1], error: e.message }, status: :unprocessable_entity
+          render json: {success: false, payload: resp.string.lines[1.. -1], error: e.message }, status: :unprocessable_entity
         end
       end
       format.stream do
