@@ -4,4 +4,4 @@ processes:
 environment:
     RAILS_ENV: production
     RAILS_MAX_THREADS: 15
-    RAILS_RELATIVE_URL_ROOT: /hozen/netapi/v1
+    RAILS_RELATIVE_URL_ROOT: /xlogin/api/v1
